@@ -66,6 +66,13 @@ app.use(helmet.ieNoOpen())
 app.use(helmet.hsts({maxAge: 90*24*60*60, force: true}))
 // improve user privacy 
 app.use(helmet.dnsPrefetchControl());
+// Remove cache 
+app.use(helmet.noCache());
+// Configure content policy
+app.use(helmet.contentSecurityPolicy({directives:{
+  defaultSrc: ["'self'"], // Trusted address
+  scriptSrc: ["'self'", 'trusted-cdn.com']  // Trusted addreses to download scripts from!
+}}))
 app.use('/_api', api);
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
